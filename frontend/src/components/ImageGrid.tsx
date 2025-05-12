@@ -18,13 +18,15 @@ const ImageGrid = () => {
   );
 
   const [isModalOpen, setModalOpen] = useState(false);
-  const isDesktop = window.innerWidth >= 768;
-  const perPage = isDesktop ? 18 : 9;
+  const [perPage, setPerPage] = useState(() => {
+    return window.innerWidth >= 768 ? 18 : 9;
+  });
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
 
   useEffect(() => {
     dispatch(fetchImages({ category, page, perPage }));
-  }, [dispatch, category, page, perPage]);
+  }, [dispatch, category, page]);
+
 
   const handleCategorySelect = (newCategory: string) => {
     dispatch(setCategory(newCategory));
