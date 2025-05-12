@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState, AppDispatch } from "../app/store";
 import {
@@ -18,9 +18,9 @@ const ImageGrid = () => {
   );
 
   const [isModalOpen, setModalOpen] = useState(false);
-  const [perPage, setPerPage] = useState(() => {
+  const perPage = useMemo(() => {
     return window.innerWidth >= 768 ? 18 : 9;
-  });
+  }, []);
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
 
   useEffect(() => {
