@@ -16,6 +16,17 @@ const ImageGrid = () => {
   const { photos, status, category, page } = useSelector(
     (state: RootState) => state.images
   );
+  const isCoarsePointer =
+    typeof window !== "undefined" &&
+    window.matchMedia?.("(pointer: coarse)")?.matches;
+
+  const gridStyle = {
+    display: "grid",
+    gridTemplateColumns: isCoarsePointer ? "1fr" : "repeat(3, 1fr)",
+    gap: "1rem",
+    maxWidth: "800px",
+    margin: "0 auto",
+  };
 
   const [isModalOpen, setModalOpen] = useState(false);
   const perPage = useMemo(() => {
@@ -25,8 +36,7 @@ const ImageGrid = () => {
 
   useEffect(() => {
     dispatch(fetchImages({ category, page, perPage }));
-  }, [dispatch, category, page]);
-
+  }, [dispatch, category, page, perPage]);
 
   const handleCategorySelect = (newCategory: string) => {
     dispatch(setCategory(newCategory));
@@ -79,7 +89,7 @@ const ImageGrid = () => {
         <p style={{ textAlign: "center" }}>Error loading images</p>
       )}
 
-      <div className="image-grid">
+      <div style={gridStyle}>
         {photos.map((photo) => (
           <img
             key={photo.id}
@@ -104,7 +114,6 @@ const ImageGrid = () => {
   );
 };
 
-const isMobile = window.matchMedia("(pointer: coarse)").matches;
 const styles = {
   wrapper: {
     backgroundColor: "#f0f4f8",
@@ -163,13 +172,6 @@ const styles = {
     borderRadius: "8px",
     fontWeight: "bold",
     cursor: "pointer",
-  },
-  grid: {
-    display: "grid",
-    gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
-    gap: "1rem",
-    maxWidth: "800px",
-    margin: "0 auto",
   },
   image: {
     width: "100%",
